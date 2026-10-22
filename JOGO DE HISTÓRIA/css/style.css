@@ -165,3 +165,21 @@ body.em-jogo .tab#t-jogo{padding:0}
 #drawer button.on{background:linear-gradient(#f4d03f,#c9a227);color:#111}
 #drawer button.red{background:#7b241c;border-color:#e74c3c}
 #drawer hr{border:0;border-top:1px solid #3d5168;margin:6px 0}
+
+/* ===== Mobile ===== */
+html{-webkit-text-size-adjust:100%}button,input{touch-action:manipulation}
+@supports(height:100dvh){.tab,#jogo,#drawer{height:100dvh}#sel{height:calc(100dvh - 80px)}}
+body.retrato .pin{width:12%}
+body.retrato .pin i{font-size:10px}
+body.retrato #hud{font-size:15px;max-width:calc(100% - 70px);left:calc(50% + 28px);padding:4px 12px}
+body.retrato #dock{right:10px;bottom:10px;font-size:16px}
+#girar{display:none;position:fixed;inset:0;z-index:80;background:#0b1118;color:#f4d03f;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:22px;padding:30px;font-family:Georgia,serif}
+body.girar.em-jogo #girar{display:flex}
+@media(max-width:700px){
+ .card{margin:2vh auto;padding:18px}.card h1{font-size:26px}
+ .mbox{padding:14px}#qtxt{margin:4px 0 10px}.opt{margin:5px 0}
+ #timer{width:44px;height:44px;font-size:20px}
+ .sl-card{padding:2vh 4vw}
+ #fsov .mbox h1{font-size:24px}
+}
+@media(max-height:480px){#hud{font-size:13px;padding:2px 12px}#dock{padding:4px 8px}.pin img{max-height:26vh}.mbox{padding:10px}.opt{padding:6px 10px;margin:4px 0}#qtxt{margin:2px 0 6px}}

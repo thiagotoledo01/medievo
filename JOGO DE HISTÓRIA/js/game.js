@@ -22,8 +22,8 @@ function mkSlides(box,itens){let i=0;box.innerHTML='<div class="sl-wrap"><button
 const TUT=[
  ['⚔️ Bem-vindo!','<p>Este jogo de tabuleiro testa o que você sabe sobre a <b>Idade Média</b>.</p><p>Estude na aba <b>📖 Resumo</b>, depois jogue na aba <b>🎮 Jogo</b>. Use as setas <b>‹ ›</b> (ou o teclado ← →) para passar os slides.</p>'],
  ['1. Preparação','<ul><li>Escolha de <b>1 a 10 times</b>.</li><li>Cada time digita seu <b>nome</b> e usa as setas <b>‹ ›</b> para escolher um personagem.</li><li>Personagens já escolhidos não se repetem.</li></ul>'],
- ['2. Na sua vez','<ul><li>Role o <b>dado físico</b>, digite o número (1 a 6) no campo embaixo do tabuleiro e clique em <b>Mover</b> (ou Enter).</li><li>Sem dado? Use <b>🎲 Rolar virtual</b>.</li><li>Surge uma <b>pergunta</b> e você tem <b>30 segundos</b> para responder.</li></ul>'],
- ['3. Acertou ou errou?','<ul><li><b>Acertou:</b> seu pino anda o número de casas do dado.</li><li><b>Errou ou o tempo acabou:</b> fica parado e passa a vez.</li><li>Não há casas de voltar nem de avançar: só o dado e o conhecimento decidem.</li></ul>'],
+ ['2. Na sua vez','<ul><li>Role o <b>dado físico</b>, digite o número (1 a 6) no campinho do canto da tela e clique em <b>Mover</b> (ou Enter).</li><li>Sem dado? Use <b>🎲 Rolar dado virtual</b> no menu ☰.</li><li>Seu pino <b>anda primeiro</b>. Ao parar na casa, surge uma <b>pergunta</b> e você tem <b>30 segundos</b>.</li></ul>'],
+ ['3. Acertou ou errou?','<ul><li><b>Acertou:</b> seu pino <b>permanece</b> na casa onde parou.</li><li><b>Errou ou o tempo acabou:</b> o pino <b>volta</b> para a casa em que estava.</li><li>Não há casas de voltar nem de avançar: só o dado e o conhecimento decidem.</li></ul>'],
  ['4. Vitória','<ul><li>Chegou na última casa? Seu time terminou!</li><li>Os <b>3 primeiros</b> a chegar formam o <b>pódio</b>.</li><li>Errou uma pergunta? Clique em <b>📖 Ver no resumo</b> para revisar o tema.</li></ul>'],
  ['5. Dicas','<ul><li>A partida é <b>salva sozinha</b>: dá para fechar e continuar depois.</li><li>Use 🔊/🔇 para o som e 🖥️ para tela cheia (ótimo na TV!).</li><li>Boa sorte, cavaleiros e damas! 🏰</li></ul>']];
 const slR=mkSlides($('sl-resumo'),TEMAS.map(t=>[t[0],'<p>'+t[1]+'</p>'])),slT=mkSlides($('sl-tut'),TUT);
@@ -56,22 +56,26 @@ function hud(){S.times.forEach((_,i)=>$('p'+i).classList.toggle('vez',i==S.vez&&
 function placar(){$('score').innerHTML=[...S.times.map((t,i)=>({t,i}))].sort((a,b)=>b.t.pts-a.t.pts).map(({t,i})=>`<span class="chip ${t.fim?'fim':''}" style="background:${COR(i)}">${t.fim?'🏁 ':''}${esc(t.nome)}: ${t.pts} pts${t.seq>1?' 🔥'+t.seq:''}</span>`).join('')}
 function rolarVirtual(){if(busy)return;const v=1+Math.random()*6|0;$('dado').value=v;bip(400,.08);toast('🎲 Saiu '+v);setTimeout(()=>jogarDado(v),500)}
 /* ---------- turno ---------- */
-function jogarDado(v){if(busy||!S||S.fim)return;if(!(v>=1&&v<=6))return alert('Digite um valor de 1 a 6.');busy=true;if(S.usadas.length>=PERGUNTAS.length)S.usadas=[];
+async function jogarDado(v){if(busy||!S||S.fim)return;if(!(v>=1&&v<=6))return alert('Digite um valor de 1 a 6.');busy=true;
+ const t=S.times[S.vez],de=t.pos,alvo=Math.min(de+v,FINAL);
+ while(t.pos<alvo){t.pos++;posiciona();bip(500+t.pos*10,.08);await wait(330)}
+ await wait(400);perguntar(v,de)}
+function perguntar(v,de){if(S.usadas.length>=PERGUNTAS.length)S.usadas=[];
  let i;do{i=Math.random()*PERGUNTAS.length|0}while(S.usadas.includes(i));S.usadas.push(i);
- const q=PERGUNTAS[i],ops=[q[2],q[3],q[4],q[5]].map((o,k)=>({o,ok:k==0})).sort(()=>Math.random()-.5);Q={i,q,ops,v,tema:q[0],feito:false};
- const t=S.times[S.vez];$('qteam').textContent='❓ '+t.nome+' — dado: '+v;$('qtema').textContent=TEMAS[q[0]][0];$('qtxt').textContent=q[1];$('fb').textContent='';$('qact').style.display='none';
+ const q=PERGUNTAS[i],ops=[q[2],q[3],q[4],q[5]].map((o,k)=>({o,ok:k==0})).sort(()=>Math.random()-.5);Q={i,q,ops,v,de,tema:q[0],feito:false};
+ const t=S.times[S.vez];$('qteam').textContent='❓ '+t.nome+' — casa '+t.pos;$('qtema').textContent=TEMAS[q[0]][0];$('qtxt').textContent=q[1];$('fb').textContent='';$('qact').style.display='none';
  $('qopts').innerHTML=ops.map((o,k)=>`<button class="opt" onclick="responde(${k})"><b>${'ABCD'[k]})</b> ${esc(o.o)}</button>`).join('');$('qov').style.display='flex';
  let tp=TEMPO_PERGUNTA;$('timer').textContent=tp;$('timer').className='';clearInterval(timer);
  timer=setInterval(()=>{if(aba_!=='jogo')return;tp--;$('timer').textContent=Math.max(tp,0);if(tp<=10)$('timer').className='u';if(tp<=0)responde(-1)},1000)}
 function responde(k){if(Q.feito)return;Q.feito=true;clearInterval(timer);const t=S.times[S.vez],ok=k>=0&&Q.ops[k].ok;
  document.querySelectorAll('.opt').forEach((b,j)=>{b.disabled=true;if(Q.ops[j].ok)b.classList.add('ok');else if(j==k)b.classList.add('no')});
- if(ok){t.seq++;t.pts+=10+(t.seq>1?5*(t.seq-1):0);$('fb').innerHTML='✅ Resposta correta! Avança '+Q.v+' casa(s).';somOk()}
- else{t.seq=0;$('fb').innerHTML=k<0?'⏰ Tempo esgotado! Fica parado.':'❌ Errou! Fica parado.';somNo()}
+ if(ok){t.seq++;t.pts+=10+(t.seq>1?5*(t.seq-1):0);$('fb').innerHTML='✅ Resposta correta! Você fica na casa '+t.pos+'.';somOk()}
+ else{t.seq=0;$('fb').innerHTML=(k<0?'⏰ Tempo esgotado!':'❌ Errou!')+' Volta para a casa '+Q.de+'.';somNo()}
  Q.ok=ok;$('b-rev').style.display=ok?'none':'inline-block';$('qact').style.display='flex';placar()}
 function verResumo(){const t=Q.tema;fechaPergunta();verTema(t)}
 async function fechaPergunta(){$('qov').style.display='none';const t=S.times[S.vez];
- if(Q.ok){const alvo=Math.min(t.pos+Q.v,FINAL);while(t.pos<alvo){t.pos++;posiciona();bip(500+t.pos*10,.08);await wait(330)}
-  if(t.pos>=FINAL){t.fim=true;S.ordem.push(S.vez);toast('🏁 '+t.nome+' chegou em '+S.ordem.length+'º lugar!',2500);confete();await wait(1500)}}
+ if(Q.ok){if(t.pos>=FINAL){t.fim=true;S.ordem.push(S.vez);toast('🏁 '+t.nome+' chegou em '+S.ordem.length+'º lugar!',2500);confete();await wait(1500)}}
+ else{await wait(300);while(t.pos>Q.de){t.pos--;posiciona();bip(300,.08,'triangle');await wait(300)}}
  proximo()}
 function proximo(){const fimN=Math.min(MAX_PODIO,S.n);if(S.ordem.length>=fimN||S.times.every(t=>t.fim)){return fimDeJogo()}
  do{S.vez=(S.vez+1)%S.n}while(S.times[S.vez].fim);$('dado').value=1;busy=false;salva();hud();placar()}

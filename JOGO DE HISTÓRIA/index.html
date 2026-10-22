@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tabuleiro da Idade Média</title>
+<meta name="theme-color" content="#0b1118">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Idade Média">
 <link rel="stylesheet" href="css/style.css"></head><body>
 <button id="menu-btn" type="button" onclick="gaveta(true)" title="Menu">☰</button>
 <div id="dback" onclick="gaveta(false)"></div>
@@ -12,6 +18,7 @@
  <hr>
  <button id="n-disp" onclick="gaveta(false);$('devov').style.display='flex'">🖥️ Dispositivo: Computador</button>
  <button id="n-rolar" onclick="gaveta(false);rolarVirtual()">🎲 Rolar dado virtual</button>
+ <button id="n-inst" onclick="instalar()">📲 Instalar app</button>
  <button id="mute" onclick="toggleSom()">🔊 Som: ligado</button>
  <button onclick="tela();gaveta(false)">🖥️ Tela cheia</button>
  <hr>
@@ -92,4 +99,5 @@
 
 <script src="js/config.js"></script>
 <script src="js/fullscreen.js"></script>
-<script src="js/game.js"></script></body></html>
+<script src="js/game.js"></script>
+<script src="js/pwa.js"></script></body></html>

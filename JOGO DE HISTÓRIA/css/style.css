@@ -183,3 +183,16 @@ body.girar.em-jogo #girar{display:flex}
  #fsov .mbox h1{font-size:24px}
 }
 @media(max-height:480px){#hud{font-size:13px;padding:2px 12px}#dock{padding:4px 8px}.pin img{max-height:26vh}.mbox{padding:10px}.opt{padding:6px 10px;margin:4px 0}#qtxt{margin:2px 0 6px}}
+
+/* ===== Correção dos slides (Resumo/Tutorial) ===== */
+.sl-card{overflow-y:auto;justify-content:safe center;-webkit-overflow-scrolling:touch}
+.sl-card h2{font-size:clamp(20px,4.2vh,38px);margin:0 0 1.6vh;flex:none}
+.sl-body p,.sl-body li{font-size:clamp(14px,2.6vh,24px);line-height:1.5}
+.dots{flex:none;flex-wrap:wrap;padding:8px 0 2px}
+@media(max-width:700px){
+ .sl-wrap{padding:0 6px 56px}
+ .sl-wrap .arr{top:auto;bottom:0;transform:none;width:48px;height:48px;font-size:32px;line-height:42px}
+ .sl-body p,.sl-body li{font-size:clamp(14px,2.4vh,19px)}
+}
+@media(max-height:480px){.tab{padding-top:10px}.sl-wrap{padding:0 64px}.sl-wrap .arr{top:50%;bottom:auto;transform:translateY(-50%)}}
+#n-inst{display:none;background:linear-gradient(#2ecc71,#1e8449)!important;border-color:#58d68d!important}

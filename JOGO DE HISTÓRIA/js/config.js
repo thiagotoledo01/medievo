@@ -1,6 +1,9 @@
 // ===== CONFIG: edite aqui ao trocar tabuleiro, personagens ou perguntas =====
 // Imagem do tabuleiro: o jogo usa a primeira que existir
 window.TABULEIRO_IMGS=['assets/board-bg.png'];
+// Tabuleiro VERTICAL para celular em pé (opcional). Se a imagem não existir, o jogo pede para girar o celular.
+// Proporção exata: 9:16 (1080x1920). O tabuleiro de computador é 16:9 (1920x1080). Posições calibradas para o board-mobile.png enviado (941x1672).
+window.TABULEIRO_MOBILE={img:'assets/board-mobile.png',casas:[{x:10.5,y:68},{x:11.4,y:77.4},{x:24.2,y:78},{x:37.2,y:79.5},{x:49.8,y:79.5},{x:62.9,y:79.8},{x:75.7,y:79.8},{x:91.2,y:78.9},{x:89.6,y:62.7},{x:92.5,y:55.9},{x:91.9,y:49.2},{x:79.9,y:47},{x:68.2,y:50.2},{x:57,y:51.9},{x:45.5,y:50.2},{x:34,y:49},{x:21.9,y:46.4},{x:10.2,y:42.8},{x:9.2,y:35.4},{x:8.9,y:26.4},{x:20.8,y:28},{x:32.7,y:29.2},{x:44.6,y:29.2},{x:56.3,y:29.3},{x:67.7,y:29.1},{x:79.3,y:28.7},{x:90.9,y:27.8}]};
 window.TEMPO_PERGUNTA = 30;
 window.MAX_PODIO = 3;
 // Personagens (imagens assets/time1.png ... time10.png)

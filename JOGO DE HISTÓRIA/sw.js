@@ -1,7 +1,7 @@
 // Service worker: permite instalar o app e jogar offline depois do primeiro acesso.
 // Ao atualizar os arquivos do jogo, aumente o número da versão abaixo.
-const VERSAO = 'idade-media-v1';
-const ARQUIVOS = ['./', 'index.html', 'css/style.css', 'js/config.js', 'js/game.js', 'js/fullscreen.js',
+const VERSAO = 'idade-media-v2';
+const ARQUIVOS = ['./', 'index.html', 'css/style.css', 'js/config.js', 'js/game.js', 'js/fullscreen.js', 'js/pwa.js',
   'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'assets/board-bg.png', 'assets/board-mobile.png',
   ...Array.from({ length: 10 }, (_, i) => `assets/time${i + 1}.png`)];
 

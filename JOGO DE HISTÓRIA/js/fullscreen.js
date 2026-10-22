@@ -1,6 +1,10 @@
-// Alterna tela cheia (botão 🖥️ no topo)
+// Alterna tela cheia (iPhone/Safari não suporta: nesse caso nada acontece)
 function tela() {
-  const f = document.fullscreenElement || document.webkitFullscreenElement;
-  if (f) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); }
-  else { const e = document.documentElement; (e.requestFullscreen || e.webkitRequestFullscreen).call(e); }
+  try {
+    const f = document.fullscreenElement || document.webkitFullscreenElement;
+    if (f) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+    const e = document.documentElement, req = e.requestFullscreen || e.webkitRequestFullscreen;
+    if (req) Promise.resolve(req.call(e)).catch(() => {});
+    else toast('Neste aparelho, use "Adicionar à tela inicial" para jogar em tela cheia.', 4000);
+  } catch (err) { console.log(err); }
 }

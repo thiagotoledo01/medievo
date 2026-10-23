@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Medievo — Jogo de tabuleiro da Idade Média</title>
+<meta name="description" content="Jogo de tabuleiro com perguntas sobre a Idade Média. Jogue no mesmo aparelho ou online com amigos.">
+<meta name="theme-color" content="#0b1118">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Medievo">
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/style.css">
+<script>window.__dip=null;addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__dip=e})</script></head><body>
+<button id="menu-btn" type="button" onclick="gaveta(true)" title="Menu">☰</button>
+<div id="dback" onclick="gaveta(false)"></div>
+<aside id="drawer">
+ <h3><img class="logo" src="icons/icon-192.png" alt="">Medievo</h3>
+ <button id="n-jogo" class="on" onclick="aba('jogo')">🎮 Jogo</button>
+ <button id="n-resumo" onclick="aba('resumo')">📖 Resumo</button>
+ <button id="n-tut" onclick="aba('tut')">❓ Tutorial</button>
+ <button id="n-ti" onclick="verInst()">📲 Como instalar</button>
+ <hr>
+ <button id="n-disp" onclick="gaveta(false);$('devov').style.display='flex'">🖥️ Dispositivo: Computador</button>
+ <button id="n-rolar" onclick="gaveta(false);rolarVirtual()">🎲 Rolar dado virtual</button>
+ <button id="n-inst" class="inst" onclick="instalar()">📲 Instalar app</button>
+ <button id="mute" onclick="toggleSom()">🔊 Som: ligado</button>
+ <button onclick="tela();gaveta(false)">🖥️ Tela cheia</button>
+ <hr>
+ <button class="red" onclick="gaveta(false);if(window.ONLINE){if(confirm('Sair da sala online?'))Online.sair()}else if(confirm('Encerrar a partida?'))reiniciar()">🗑️ Encerrar partida / sair</button>
+</aside>
+<div class="ov" id="devov" style="display:none;z-index:410"><div class="mbox" style="text-align:center;max-width:560px">
+ <h1 style="color:#f4d03f">Qual dispositivo você está usando?</h1>
+ <p style="font-size:18px;margin:12px 0 20px">Assim o jogo escolhe o tabuleiro certo para a sua tela.</p>
+ <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+  <button class="btn" style="font-size:20px;padding:18px 26px" onclick="setDisp('desktop')">🖥️ Computador / TV</button>
+  <button class="btn" style="font-size:20px;padding:18px 26px" onclick="setDisp('mobile')">📱 Celular</button>
+ </div>
+</div></div>
+<div class="ov" id="fsov" style="display:none;z-index:400"><div class="mbox" style="text-align:center;max-width:520px">
+ <h1 style="color:#f4d03f">🖥️ Melhor em tela cheia</h1>
+ <p style="font-size:20px;margin:14px 0 20px">Para uma melhor experiência, recomendamos jogar em <b>tela cheia</b>.</p>
+ <button class="btn" onclick="tela();$('fsov').style.display='none'">Ativar tela cheia</button>
+ <button class="btn gray" onclick="$('fsov').style.display='none'">Continuar assim</button>
+</div></div>
+
+<!-- ABA JOGO -->
+<div class="tab on" id="t-jogo">
+ <div id="setup" class="card home">
+  <img class="titulo" src="assets/titulo.png" alt="Medievo" width="1600" height="640">
+  <p class="sub">Tabuleiro da Idade Média</p>
+  <div class="modos">
+   <button class="btn big" onclick="Online.abre('criar')">🌐 Criar sala online</button>
+   <button class="btn big blue" onclick="Online.abre('entrar')">🔑 Entrar com código</button>
+   <button class="btn big gray" onclick="$('local').classList.toggle('show')">👥 Jogar no mesmo aparelho</button>
+  </div>
+  <div id="local">
+   <p>Quantos times vão jogar? (1 a 10)</p>
+   <input type="number" id="nt" min="1" max="10" value="2">
+   <button class="btn" onclick="irSelecao()">Escolher personagens ➜</button>
+  </div>
+  <p><button class="btn gray" id="btn-cont" style="display:none" onclick="continuar()">▶ Continuar partida salva</button></p>
+  <div class="rodape">
+   <p class="dica">💡 Dica: leia o Resumo antes de jogar!</p>
+   <button class="btn dl inst" onclick="instalar()">📲 Baixar app para celular</button>
+  </div>
+ </div>
+
+ <div id="sel" style="display:none">
+  <div class="stage"><div class="car">
+   <button class="arr" type="button" onclick="mudaP(-1)">‹</button>
+   <div><img id="s-img" alt=""><div class="pf" id="s-pf">🛡️</div></div>
+   <button class="arr" type="button" onclick="mudaP(1)">›</button>
+  </div></div>
+  <div class="info">
+   <div class="lbl" id="s-time"></div>
+   <input type="text" id="s-nome" maxlength="22" placeholder="Nome do time">
+   <h2 id="s-pers"></h2>
+   <div class="resumo" id="s-res"></div>
+   <div class="thumbs" id="s-thumbs"></div>
+   <div class="taken" id="s-taken"></div>
+   <button class="btn" id="s-ok" onclick="confirmaP()">✔ Escolher este personagem</button>
+  </div>
+ </div>
+
+ <div id="jogo">
+  <div id="board"><div id="hud"></div><div id="pins"></div></div>
+  <div id="dock"><button class="btn rolar" id="b-rolar" type="button" onclick="rolarVirtual()"><span id="die" class="die f1"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>Rolar dado</button><input type="number" id="dado" min="1" max="6" value="1"><button class="btn" id="b-mover" onclick="jogarDado(+$('dado').value)">Mover</button></div>
+  <div id="score" style="display:none"></div>
+ </div>
+</div>
+
+<!-- ABA RESUMO (slides) -->
+<div class="tab" id="t-resumo"><div class="sl" id="sl-resumo"></div></div>
+
+<!-- ABA TUTORIAL (slides) -->
+<div class="tab" id="t-tut"><div class="sl" id="sl-tut"></div></div>
+
+<!-- ABA COMO INSTALAR (slides) -->
+<div class="tab" id="t-ti"><div class="sl" id="sl-ti"></div></div>
+
+<div class="ov" id="qov"><div class="mbox">
+ <div class="mh"><span id="qteam"></span><div id="timer">30</div></div>
+ <span class="tema" id="qtema"></span>
+ <div id="qtxt"></div><div id="qopts"></div><div id="fb"></div>
+ <div id="qact" style="display:none;gap:10px;flex-wrap:wrap">
+  <button class="btn" onclick="fechaPergunta()">Continuar ➜</button>
+  <button class="btn gray" id="b-rev" onclick="verResumo()">📖 Ver no resumo</button>
+ </div>
+</div></div>
+
+<div class="ov" id="pov"><div class="mbox" style="text-align:center">
+ <h1 style="color:#f1c40f">🏆 Pódio Final 🏆</h1><div class="pod" id="pod"></div>
+ <button class="btn" onclick="reiniciar()">Jogar de novo</button>
+</div></div>
+<div class="ov" id="onov" style="z-index:300"><div class="mbox onbox">
+ <button class="x-fecha" type="button" onclick="Online.fecha()" title="Fechar">✕</button>
+ <div id="on-form">
+  <h1>🌐 Jogar online</h1>
+  <label>Seu nome<input type="text" id="on-nome" maxlength="22" placeholder="Como vão te chamar?" autocomplete="nickname"></label>
+  <div id="on-codebox"><label>Código da sala<input type="text" id="on-cod" maxlength="5" placeholder="EX: K7P2Q" autocapitalize="characters" autocomplete="off"></label></div>
+  <p id="on-err"></p>
+  <button class="btn big" id="on-go">Entrar</button>
+ </div>
+ <div id="on-lobby" style="display:none">
+  <p class="lbl">Código da sala</p>
+  <div id="on-code" class="codigo"></div>
+  <div class="share">
+   <button class="btn" onclick="Online.copiaCodigo()">📋 Copiar código</button>
+   <button class="btn blue" onclick="Online.compartilha()">🔗 Compartilhar link</button>
+  </div>
+  <h3>Jogadores <span id="on-count"></span></h3>
+  <ul id="on-lista"></ul>
+  <h3>Escolha seu personagem</h3>
+  <div class="thumbs" id="on-av"></div>
+  <button class="btn big" id="on-start" onclick="Online.comecar()">⚔️ Começar partida</button>
+  <p id="on-wait">⏳ Aguardando o anfitrião 👑 começar…</p>
+  <button class="btn red" onclick="Online.sair()">🚪 Sair da sala</button>
+ </div>
+</div></div>
+<div id="on-tag" onclick="Online.copiaCodigo()" title="Copiar código"></div>
+<div id="girar"><div style="font-size:70px">📱↻</div><p>Gire o celular para a horizontal para jogar</p></div>
+<div id="toast"></div>
+
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/fullscreen.js"></script>
+<script src="js/game.js"></script>
+<script src="js/pwa.js"></script>
+<script src="js/firebase-config.js"></script>
+<script type="module" src="js/online.js"></script></body></html>

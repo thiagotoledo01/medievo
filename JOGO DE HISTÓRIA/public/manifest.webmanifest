@@ -1,0 +1,20 @@
+{
+  "id": "./",
+  "name": "Medievo",
+  "short_name": "Medievo",
+  "description": "Jogo de tabuleiro com perguntas sobre a Idade Média",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "landscape",
+  "background_color": "#0b1118",
+  "theme_color": "#0b1118",
+  "lang": "pt-BR",
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

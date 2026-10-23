@@ -1,7 +1,7 @@
 
  // Service worker: permite instalar o app e jogar offline depois do primeiro acesso.
  // Ao atualizar os arquivos do jogo, aumente o número da versão abaixo.
-const VERSAO = 'medievo-v15';
+const VERSAO = 'medievo-v16';
 
 const ARQUIVOS = [
   './',

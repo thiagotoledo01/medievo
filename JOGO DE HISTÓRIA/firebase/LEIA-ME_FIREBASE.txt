@@ -1,8 +1,0 @@
-REGRAS DO FIREBASE (Realtime Database)
-
-1. Abra console.firebase.google.com e entre no projeto "medievo-c9a64".
-2. Menu Criação > Authentication > Método de login: ATIVE "Anônimo".
-3. Menu Criação > Realtime Database > aba "Regras".
-4. Apague tudo, cole o conteúdo do arquivo database.rules.json e clique em "Publicar".
-
-Observação: as regras exigem login anônimo (o jogo já faz isso sozinho).
